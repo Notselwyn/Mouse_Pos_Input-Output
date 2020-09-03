@@ -11,7 +11,7 @@ def main():
     size = [256, 356]
 
     pygame.display.set_caption('Get Mouse Pos')
-    IconImg = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/mRF7f8F.png").content))
+    IconImg = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/NIosCpP.png").content))
     pygame.display.set_icon(IconImg)
 
     screen = pygame.display.set_mode(size)
@@ -24,13 +24,13 @@ def main():
     button = pygame.Rect(103, 296, 50, 50)  # creates a rect object
 
     screen.fill([255, 255, 255])
-    GridImg = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/87JptvU.png").content))
+    GridImg = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/brmfQRl.png").content))
     GridImg = pygame.transform.scale(GridImg, (256, 256))
     screen.blit(GridImg, (0, 0))
     GridImg.set_alpha(15)
 
-    greenPx = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/MOLrj3i.png").content))
-    redPx = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/jwcMyA1.png").content))
+    greenPx = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/KAnOMX5.png").content))
+    redPx = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/arfdEmr.png").content))
 
     screen.blit(text, textRect)
     pygame.draw.rect(screen, [255, 0, 0], button)  # draw button
