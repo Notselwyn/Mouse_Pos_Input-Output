@@ -1,6 +1,8 @@
 import pygame
 import datetime
 import sys
+import io
+import requests
 
 
 def main():
@@ -8,31 +10,27 @@ def main():
     clock = pygame.time.Clock()
     size = [256, 356]
 
-    # transparent = (0, 0, 0, 0)
-    white = [255, 255, 255]
-    black = [0, 0, 0]
-
     pygame.display.set_caption('Get Mouse Pos')
-    IconImg = pygame.image.load(r'C:\Users\Wit\Desktop\Programming shit\img\icon.png')
+    IconImg = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/mRF7f8F.png").content))
     pygame.display.set_icon(IconImg)
 
     screen = pygame.display.set_mode(size)
 
     font = pygame.font.Font('freesansbold.ttf', 20)
-    text = font.render('Replay tracers', True, black, white)
+    text = font.render('Replay tracers', True, [0, 0, 0], [255, 255, 255])
     textRect = text.get_rect()
     textRect.center = (128, 276)
 
     button = pygame.Rect(103, 296, 50, 50)  # creates a rect object
 
-    screen.fill(white)
-    GridImg = pygame.image.load(r'C:\Users\Wit\Desktop\Programming shit\img\grid.png')
+    screen.fill([255, 255, 255])
+    GridImg = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/87JptvU.png").content))
     GridImg = pygame.transform.scale(GridImg, (256, 256))
     screen.blit(GridImg, (0, 0))
     GridImg.set_alpha(15)
 
-    greenPx = pygame.image.load(r'C:\Users\Wit\Desktop\Programming shit\img\greenPx.png')
-    redPx = pygame.image.load(r'C:\Users\Wit\Desktop\Programming shit\img\redpx.png')
+    greenPx = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/MOLrj3i.png").content))
+    redPx = pygame.image.load(io.BytesIO(requests.get("https://i.imgur.com/jwcMyA1.png").content))
 
     screen.blit(text, textRect)
     pygame.draw.rect(screen, [255, 0, 0], button)  # draw button
@@ -83,7 +81,7 @@ def main():
             sys.stdout.flush()
 
         pygame.display.flip()
-        clock.tick(144)
+        clock.tick(200)
     pygame.quit()
     sys.exit
 
