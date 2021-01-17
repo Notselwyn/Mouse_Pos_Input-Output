@@ -35,13 +35,16 @@ def draw_window(tracers=True, replayTracers=False, flushTracers=False, size=256,
     print()
     IconImg = pygame.image.load(os.path.join(f"{pathlib.Path(__file__).parent.absolute()}/img", "icon.png"))
     pygame.display.set_icon(IconImg)
-
+    
+    # makes window larger for replay tracers button
     if replayTracers:
         size = [size, size+100]
     elif not replayTracers:
         size = [size, size]
+
     screen = pygame.display.set_mode(size)
 
+    # declaring props
     button = pygame.Rect(103, 296, 50, 50)
     button.center = [size[0]/2, size[1]-40]
 
@@ -50,9 +53,11 @@ def draw_window(tracers=True, replayTracers=False, flushTracers=False, size=256,
     GridImg = pygame.transform.scale(GridImg, (size[0], size[0]))
     screen.blit(GridImg, (0, 0))
     GridImg.set_alpha(15)
-
+    
+    # declares tracer info
     if tracers:
         greenPx = pygame.image.load(os.path.join(f"{pathlib.Path(__file__).parent.absolute()}/img", "greenpx.png"))
+    
     if replayTracers:
         redPx = pygame.image.load(os.path.join(f"{pathlib.Path(__file__).parent.absolute()}/img", "redpx.png"))
 
@@ -64,6 +69,7 @@ def draw_window(tracers=True, replayTracers=False, flushTracers=False, size=256,
         screen.blit(text, textRect)
         pygame.draw.rect(screen, [255, 0, 0], button)
 
+    # default values; delay can be tweaked.
     datetime_delay = datetime.datetime.now()
     MousePosList = []
     tracerNum = 0
@@ -71,46 +77,52 @@ def draw_window(tracers=True, replayTracers=False, flushTracers=False, size=256,
     delay = .1
 
     while True:
+        # print stuff to the screen
         screen.blit(GridImg, (0, 0))
         mousepos = pygame.mouse.get_pos()
         datetime_now = datetime.datetime.now()
         down_cap = float((datetime_now - datetime_delay).total_seconds())
-
-        if down:
-            try:
-                screen.blit(redPx, MousePosList[tracerNum])
-                sys.stdout.write(f"\r{MousePosList[tracerNum]}")
-                tracerNum += 1
-                if tracerNum == len(MousePosList):
-                    tracerNum = 0
-            except IndexError:
-                pass
 
         if down and down_cap <= delay and replayTracers:
             pygame.draw.rect(screen, [200, 0, 0], button)
         elif not down and down_cap >= delay and replayTracers:
             pygame.draw.rect(screen, [255, 0, 0], button)
 
+        # replay tracers
+        if down and len(MousePosList) > 0:    
+            screen.blit(redPx, MousePosList[tracerNum])
+            sys.stdout.write(f"\r{MousePosList[tracerNum]}")
+            tracerNum += 1
+            if tracerNum == len(MousePosList):
+                tracerNum = 0
+
         for event in pygame.event.get():
+            # stop process
             if event.type == pygame.QUIT:
                 if event.type == pygame.QUIT:
                     return False
-            if replayTracers is True and event.type == pygame.MOUSEBUTTONDOWN and button.collidepoint(mousepos) and down_cap >= delay:
+
+            # draw tracers on mouse
+            elif replayTracers is True and event.type == pygame.MOUSEBUTTONDOWN and button.collidepoint(mousepos) and down_cap >= delay:
                 for y in MousePosList:
                     screen.blit(greenPx, y)
                 datetime_delay = datetime.datetime.now()
                 tracerNum = 0
                 down = True
+
+            # reset replay tracers list after button press
             elif event.type == pygame.MOUSEBUTTONUP and down:
                 if flushTracers:
                     MousePosList = []
                 down = False
 
         if 0 <= mousepos[1] <= size[0] and 0 <= mousepos[0] <= size[0] and MousePosList.count(mousepos) < 3 and not down:
+            # add mouse pos to tracers list so it can be replayed later
             if tracers:
                 screen.blit(greenPx, mousepos)
                 MousePosList.append(mousepos)
 
+            # flushes chat instead of spamming
             if flushChat:
                 sys.stdout.flush()
                 sys.stdout.write(f"\r{mousepos}")
